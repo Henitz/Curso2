@@ -1,8 +1,6 @@
 package com.sistema.api.controller;
-
 import com.sistema.api.model.Cliente;
 import com.sistema.api.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +30,8 @@ public class ClienteController {
 
         @GetMapping("/{id}")
         public Cliente um(@PathVariable Integer id) { return clienteRepository.findById(id).get(); }
+
+
 
 
 }
