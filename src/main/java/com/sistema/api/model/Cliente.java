@@ -12,6 +12,9 @@ public class Cliente {
     private Integer id;
     private String nome;
     private Integer quantidadeFuncionarios;
+    private String cidade;
+
+
 
     public Integer getId() {
         return id;
@@ -35,5 +38,13 @@ public class Cliente {
 
     public void setQuantidadeFuncionarios(Integer quantidadeFuncionarios) {
         this.quantidadeFuncionarios = quantidadeFuncionarios;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 }
