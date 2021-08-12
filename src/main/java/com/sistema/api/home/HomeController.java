@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     @GetMapping
     public String home() {
-        String s = "Seja Bem Vindo 19:10!!!";
+        String s = "Seja Bem Vindo 19:15!!!";
         return s;
     }
 }
