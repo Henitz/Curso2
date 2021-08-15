@@ -1,5 +1,6 @@
 package com.sistema.api.controller;
 import com.sistema.api.model.Cliente;
+import com.sistema.api.model.Mensagem;
 import com.sistema.api.repository.ClienteRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,18 @@ public class ClienteController {
         }
 
         @GetMapping("/{id}")
-        public Cliente um(@PathVariable Integer id) { return clienteRepository.findById(id).get(); }
+        public Cliente um(@PathVariable Integer id) {
+            return clienteRepository.findById(id).get();
+        }
 
+        @DeleteMapping("/{id}")
+        public Mensagem delete(@PathVariable Integer id) {
+            if(!clienteRepository.existsById(id)) {
+                return new Mensagem("Cliente não existe");
+            }
 
+            clienteRepository.deleteById(id);
+            return new Mensagem("Deletado com sucesso");
 
-
+        }
 }
