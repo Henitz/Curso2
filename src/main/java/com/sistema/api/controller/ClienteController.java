@@ -4,6 +4,7 @@ import com.sistema.api.model.Mensagem;
 import com.sistema.api.repository.ClienteRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.PostUpdate;
 import java.util.List;
 
 @RestController
@@ -36,12 +37,18 @@ public class ClienteController {
 
         @DeleteMapping("/{id}")
         public Mensagem delete(@PathVariable Integer id) {
-            if(!clienteRepository.existsById(id)) {
+            if (!clienteRepository.existsById(id)) {
                 return new Mensagem("Cliente não existe");
             }
 
             clienteRepository.deleteById(id);
             return new Mensagem("Deletado com sucesso");
-
         }
+
+        @PutMapping("/{id}")
+        public Cliente alterar(@RequestBody Cliente cliente, @PathVariable int id) {
+             cliente.setId(id);
+        return clienteRepository.save(cliente);
+    }
+
 }
