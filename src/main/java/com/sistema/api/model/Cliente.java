@@ -16,8 +16,24 @@ public class Cliente {
     private String nome;
     private Integer quantidadeFuncionarios;
     private String cidade;
+    private String Estado;
+    private String Pais;
 
+    public String getEstado() {
+        return Estado;
+    }
 
+    public void setEstado(String estado) {
+        Estado = estado;
+    }
+
+    public String getPais() {
+        return Pais;
+    }
+
+    public void setPais(String pais) {
+        Pais = pais;
+    }
 
     public Integer getId() {
         return id;
