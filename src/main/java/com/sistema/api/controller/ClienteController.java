@@ -45,6 +45,17 @@ public class ClienteController {
             return new Mensagem("Deletado com sucesso");
         }
 
+        @PatchMapping("{id}/ativo")
+        public Cliente mudarStatus(@PathVariable Integer id){
+            Cliente cliente =  clienteRepository.findById(id).get();
+            if(cliente.getAtivo()){
+                cliente.setAtivo(false);
+            }else{
+                cliente.setAtivo(true);
+            }
+            return clienteRepository.save(cliente);
+        }
+
         @PutMapping("/{id}")
         public Cliente alterar(@RequestBody Cliente cliente, @PathVariable int id) {
              cliente.setId(id);

@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "faf43f91-edf1-4d3a-bd24-71c1456d8a8f",
+		"name": "Vídeo André Clientes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Criar cliente Henrique",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.globals.set(\"id\", resposta.id);\r",
+							"pm.test(\"Cadastrou \" + resposta.nome, function(){\r",
+							"    pm.expect(resposta.nome).is.to.equal(\"Henrique\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Jonas\",\r\n    \"quantidadeFuncionarios\": 1200,\r\n    \"cidade\": \"Chapecó\",\r\n    \"estado\": \"Santa Catarina\",\r\n    \"pais\": \"Brasil\",\r\n    \"ativo\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endereço}}/clientes",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar clientes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Listou todos \" + resposta[0].nome, function(){\r",
+							"    pm.expect(resposta[0].nome).is.to.equal(\"Henrique\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar um cliente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Listou 1 \" + resposta.nome, function(){\r",
+							"    pm.expect(resposta.nome).is.to.equal(\"Henrique\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes/{{id}}",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Henrique",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Deletou \", function(){\r",
+							"    pm.expect(resposta.titulo).is.to.equal(\"Deletado com sucesso\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes/{{id}}",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Cliente não existente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Deletou \", function(){\r",
+							"    pm.expect(resposta.titulo).is.to.equal(\"Cliente não existe\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes/9999999",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar cliente Andre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.globals.set(\"id\", resposta.id);\r",
+							"pm.test(\"Cadastrou \" + resposta.nome, function(){\r",
+							"    pm.expect(resposta.nome).is.to.equal(\"André\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"André\",\r\n    \"quantidadeFuncionarios\": 300,\r\n    \"cidade\": \"São Paulo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endereço}}/clientes",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar clientes Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Listou todos \" + resposta[0].nome, function(){\r",
+							"    pm.expect(resposta[0].nome).is.not.to.equal(\"Henrique\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endereço}}/clientes",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete André",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.test(\"Deletou \", function(){\r",
+							"    pm.expect(resposta.titulo).is.to.equal(\"Deletado com sucesso\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes/{{id}}",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.globals.set(\"id\", resposta.id);\r",
+							"pm.test(\"Cadastrou \" + resposta.nome, function(){\r",
+							"    pm.expect(resposta.nome).is.to.equal(\"Henrique\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"nome\": \"Jorge\",\r\n        \"quantidadeFuncionarios\": 890,\r\n        \"cidade\": \"Curitiba\",\r\n        \"estado\": \"Paraná\",\r\n        \"pais\": \"Brasil\",\r\n        \"ativo\": true\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endereço}}/clientes/{{id}}",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ativo Inativo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
+							"const resposta = pm.response.json();\r",
+							"pm.globals.set(\"id\", resposta.id);\r",
+							"pm.test(\"Mudou o status \" + resposta.nome, function(){\r",
+							"    //pm.expect(resposta.nome).is.to.equal(\"Henrique\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{endereço}}/clientes/{{id}}/ativo",
+					"host": [
+						"{{endereço}}"
+					],
+					"path": [
+						"clientes",
+						"{{id}}",
+						"ativo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

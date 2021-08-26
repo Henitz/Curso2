@@ -18,6 +18,15 @@ public class Cliente {
     private String cidade;
     private String Estado;
     private String Pais;
+    private Boolean ativo;
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
 
     public String getEstado() {
         return Estado;
