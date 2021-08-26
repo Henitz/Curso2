@@ -27,6 +27,7 @@ public class ClienteController {
 
         @PostMapping
         public Cliente salvar(@RequestBody Cliente cliente) {
+            cliente.setAtivo(true);
             return clienteRepository.save(cliente);
         }
 
