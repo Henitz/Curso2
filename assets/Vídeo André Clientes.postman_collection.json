@@ -147,7 +147,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete Cliente não existente",
+			"name": "Delete Registro não encontradonte",
 			"event": [
 				{
 					"listen": "test",
@@ -156,7 +156,7 @@
 							"tests[\"Sucesso\"] = responseCode.code == 200;\r",
 							"const resposta = pm.response.json();\r",
 							"pm.test(\"Deletou \", function(){\r",
-							"    pm.expect(resposta.titulo).is.to.equal(\"Cliente não existe\");\r",
+							"    pm.expect(resposta.titulo).is.to.equal(\"Registro não encontrado\");\r",
 							"})"
 						],
 						"type": "text/javascript"
