@@ -1,10 +1,9 @@
 package com.sistema.api.model;
 
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 
@@ -17,6 +16,26 @@ public class Pedido {
     private Integer codigo;
     private LocalDate data;
     private Boolean ativo;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
+    private Produto produto;
+
+    
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
 
     public Boolean getAtivo() {
         return ativo;
@@ -42,7 +61,11 @@ public class Pedido {
         this.data = data;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
 
-
-
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }

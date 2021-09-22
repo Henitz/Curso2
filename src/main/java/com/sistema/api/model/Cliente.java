@@ -20,6 +20,7 @@ public class Cliente {
     private String Pais;
     private Boolean ativo;
 
+
     public Boolean getAtivo() {
         return ativo;
     }
