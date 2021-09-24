@@ -49,10 +49,14 @@ public class ClienteController extends MainController {
     @DeleteMapping("/{id}")
     public Mensagem delete(@PathVariable Integer id) {
 
+        Cliente cliente= new Cliente();
+        cliente.setId(id);
 
-        int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(id);
-        logger.info("#####" + id);
-        logger.info("Quantidade de pedidos" + quantidadeDePedidos);
+        int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(cliente);
+
+        logger.info("Id: " + id);
+        logger.info("Quantidade de pedidos: " + quantidadeDePedidos);
+
         if(quantidadeDePedidos > 0){
             return new Mensagem("Preciso bloquear a deleção");
         } else {
