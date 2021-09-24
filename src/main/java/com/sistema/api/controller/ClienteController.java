@@ -1,9 +1,14 @@
 package com.sistema.api.controller;
 
+import com.sistema.api.SistemaApiApplication;
 import com.sistema.api.home.MainController;
 import com.sistema.api.model.Cliente;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.repository.ClienteRepository;
+import com.sistema.api.repository.PedidoRepository;
+import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,11 +18,16 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ClienteController extends MainController {
 
-    private ClienteRepository clienteRepository;
+    private static Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
-    public ClienteController(ClienteRepository clienteRepository) {
+    private ClienteRepository clienteRepository;
+    private PedidoRepository pedidoRepository;
+
+    public ClienteController(ClienteRepository clienteRepository,
+                             PedidoRepository pedidoRepository) {
 
         this.clienteRepository = clienteRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @GetMapping
@@ -38,12 +48,25 @@ public class ClienteController extends MainController {
 
     @DeleteMapping("/{id}")
     public Mensagem delete(@PathVariable Integer id) {
-        if (!clienteRepository.existsById(id)) {
-            return new Mensagem(REGISTRO_NAO_ENCONTRADO);
+
+
+        int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(id);
+        logger.info("#####" + id);
+        logger.info("Quantidade de pedidos" + quantidadeDePedidos);
+        if(quantidadeDePedidos > 0){
+            return new Mensagem("Preciso bloquear a deleção");
+        } else {
+            return new Mensagem("Da pra deletar por que não tem amarrações em uso");
         }
 
-        clienteRepository.deleteById(id);
-        return new Mensagem(DELETADO_COM_SUCESSO);
+
+
+//        if (!clienteRepository.existsById(id)) {
+//            return new Mensagem(REGISTRO_NAO_ENCONTRADO);
+//        }
+//
+//        clienteRepository.deleteById(id);
+//        return new Mensagem(DELETADO_COM_SUCESSO);
     }
 
     @PatchMapping("{id}/ativo")
