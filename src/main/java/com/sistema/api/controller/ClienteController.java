@@ -1,12 +1,10 @@
 package com.sistema.api.controller;
 
-import com.sistema.api.SistemaApiApplication;
 import com.sistema.api.home.MainController;
 import com.sistema.api.model.Cliente;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.repository.ClienteRepository;
 import com.sistema.api.repository.PedidoRepository;
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -56,11 +54,15 @@ public class ClienteController extends MainController {
 
         logger.info("Id: " + id);
         logger.info("Quantidade de pedidos: " + quantidadeDePedidos);
-
+        Boolean block_delecao = false;
         if(quantidadeDePedidos > 0){
-            return new Mensagem("Preciso bloquear a deleção");
+            block_delecao = true;
+            return new Mensagem("Preciso bloquear a deleção", block_delecao );
         } else {
-            return new Mensagem("Da pra deletar por que não tem amarrações em uso");
+           // return new Mensagem("Da pra deletar por que não tem amarrações em uso");
+            clienteRepository.deleteById(id);
+            return new Mensagem(DELETADO_COM_SUCESSO, block_delecao);
+
         }
 
 
