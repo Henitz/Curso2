@@ -7,6 +7,7 @@ import com.sistema.api.repository.ClienteRepository;
 import com.sistema.api.repository.PedidoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ClienteController extends MainController {
 
     @GetMapping
     public List<Cliente> todos() {
-        return (List<Cliente>) clienteRepository.findAll();
+        return (List<Cliente>) clienteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @PostMapping
@@ -64,15 +65,6 @@ public class ClienteController extends MainController {
             return new Mensagem(DELETADO_COM_SUCESSO, block_delecao);
 
         }
-
-
-
-//        if (!clienteRepository.existsById(id)) {
-//            return new Mensagem(REGISTRO_NAO_ENCONTRADO);
-//        }
-//
-//        clienteRepository.deleteById(id);
-//        return new Mensagem(DELETADO_COM_SUCESSO);
     }
 
     @PatchMapping("{id}/ativo")
