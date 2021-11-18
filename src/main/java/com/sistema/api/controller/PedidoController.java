@@ -4,7 +4,6 @@ package com.sistema.api.controller;
 import com.sistema.api.home.MainController;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.model.Pedido;
-import com.sistema.api.model.Produto;
 import com.sistema.api.repository.PedidoRepository;
 import org.springframework.web.bind.annotation.*;
 
