@@ -48,6 +48,8 @@ public class ClienteController extends MainController {
     @DeleteMapping("/{id}")
     public Mensagem delete(@PathVariable Integer id) {
 
+        
+
         Cliente cliente= new Cliente();
         cliente.setId(id);
 
