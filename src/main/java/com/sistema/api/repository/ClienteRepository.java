@@ -13,4 +13,9 @@ public interface ClienteRepository extends CrudRepository<Cliente,Integer> {
     public int total();
 
     List<Cliente> findAll(Sort id);
+
+    List<Cliente> findByAccountAccountId(String accountId);
+
+    Cliente findByIdAndAccountAccountId(Integer id, String accountId);
+
 }

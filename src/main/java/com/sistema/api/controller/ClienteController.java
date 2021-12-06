@@ -1,13 +1,15 @@
 package com.sistema.api.controller;
 
 import com.sistema.api.home.MainController;
+import com.sistema.api.model.Account;
 import com.sistema.api.model.Cliente;
 import com.sistema.api.model.Mensagem;
+import com.sistema.api.repository.AccountRepository;
 import com.sistema.api.repository.ClienteRepository;
 import com.sistema.api.repository.PedidoRepository;
+import com.sistema.api.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,44 +23,61 @@ public class ClienteController extends MainController {
 
     private ClienteRepository clienteRepository;
     private PedidoRepository pedidoRepository;
+    private AccountService accountService;
 
     public ClienteController(ClienteRepository clienteRepository,
-                             PedidoRepository pedidoRepository) {
+                             PedidoRepository pedidoRepository,
+                             AccountService accountService
+                             ) {
 
         this.clienteRepository = clienteRepository;
         this.pedidoRepository = pedidoRepository;
+        this.accountService = accountService;
+
     }
 
-    @GetMapping
-    public List<Cliente> todos() {
-        return (List<Cliente>) clienteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    @GetMapping("/{accountId}")
+    public List<Cliente> todos(@PathVariable String accountId) {
+        return (List<Cliente>) clienteRepository.findByAccountAccountId(accountId);
+
+                // Sort.Direction.ASC, "id"
     }
 
-    @PostMapping
-    public Cliente salvar(@RequestBody Cliente cliente) {
+    @PostMapping("/{accountId}")
+    public Cliente save(@PathVariable String accountId, @RequestBody Cliente cliente) {
         cliente.setAtivo(true);
+        Account account = accountService.getAccountByAccountId(accountId);
+        cliente.setAccount(account);
         return clienteRepository.save(cliente);
     }
 
-    @GetMapping("/{id}")
-    public Cliente um(@PathVariable Integer id) {
-        return clienteRepository.findById(id).get();
+    @GetMapping("/{id}/{accountId}")
+    public Cliente um(@PathVariable Integer id, @PathVariable String accountId) {
+
+        return (Cliente) clienteRepository.findByIdAndAccountAccountId(id, accountId);
     }
 
-    @DeleteMapping("/{id}")
-    public Mensagem delete(@PathVariable Integer id) {
-
-        
+    @DeleteMapping("/{id}/{accountId}")
+    public Mensagem delete(@PathVariable Integer id, @PathVariable String accountId) {
 
         Cliente cliente= new Cliente();
         cliente.setId(id);
+
+        Account account = accountService.getAccountByAccountId(accountId);
+        cliente.setAccount(account);
 
         int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(cliente);
 
         logger.info("Id: " + id);
         logger.info("Quantidade de pedidos: " + quantidadeDePedidos);
         Boolean block_delecao = false;
-        if(quantidadeDePedidos > 0){
+
+        //TODO verificar se precisa de mais uma condição aqui
+        // &&
+        //clienteRepository.findById(id).getAccount()
+         //       .notequals(accountService.getAccountByAccountId(accountId))
+        if(quantidadeDePedidos > 0
+        ){
             block_delecao = true;
             return new Mensagem("Preciso bloquear a deleção", block_delecao );
         } else {
@@ -69,9 +88,16 @@ public class ClienteController extends MainController {
         }
     }
 
-    @PatchMapping("{id}/ativo")
-    public Cliente mudarStatus(@PathVariable Integer id) {
+    @PatchMapping("{id}/ativo/{accountId}")
+    public Cliente mudarStatus(@PathVariable Integer id, @PathVariable String accountId) {
+
+
         Cliente cliente = clienteRepository.findById(id).get();
+
+        Account account = accountService.getAccountByAccountId(accountId);
+        cliente.setAccount(account);
+
+
         if (cliente.getAtivo()) {
             cliente.setAtivo(false);
         } else {
@@ -80,8 +106,11 @@ public class ClienteController extends MainController {
         return clienteRepository.save(cliente);
     }
 
-    @PutMapping("/{id}")
-    public Cliente alterar(@RequestBody Cliente cliente, @PathVariable int id) {
+    @PutMapping("/{id}/{accountId}")
+    public Cliente alterar(@RequestBody Cliente cliente, @PathVariable int id, @PathVariable String accountId) {
+        Account account = accountService.getAccountByAccountId(accountId);
+        System.out.println(account);
+        cliente.setAccount(account);
         cliente.setId(id);
         return clienteRepository.save(cliente);
     }

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AccountService extends UserDetailsService {
     Account save(AccountLoginRequest accountLoginRequest);
-    Account getAccountByAccountId(String id);
+    Account getAccountByAccountId(String accountId);
     String getAccountByEmail(String email);
 }
