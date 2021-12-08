@@ -26,7 +26,17 @@ public class Pedido {
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public Produto getProduto() {
         return produto;

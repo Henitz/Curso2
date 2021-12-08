@@ -92,10 +92,9 @@ public class ClienteController extends MainController {
     public Cliente mudarStatus(@PathVariable Integer id, @PathVariable String accountId) {
 
 
-        Cliente cliente = clienteRepository.findById(id).get();
+        Cliente cliente = clienteRepository.findByIdAndAccountAccountId(id, accountId);
 
-        Account account = accountService.getAccountByAccountId(accountId);
-        cliente.setAccount(account);
+
 
 
         if (cliente.getAtivo()) {

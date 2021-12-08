@@ -1,9 +1,11 @@
 package com.sistema.api.controller;
 
 import com.sistema.api.home.MainController;
+import com.sistema.api.model.Account;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.model.Produto;
 import com.sistema.api.repository.ProdutoRepository;
+import com.sistema.api.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,26 +16,37 @@ import java.util.List;
 public class ProdutoController extends MainController {
 
     private ProdutoRepository produtoRepository;
+    private AccountService accountService;
 
-    public ProdutoController(ProdutoRepository produtoRepository) {
+    public ProdutoController(ProdutoRepository produtoRepository,
+                             AccountService accountService
+    ) {
         this.produtoRepository = produtoRepository;
+        this.accountService = accountService;
     }
 
-    @GetMapping
-    public List<Produto> todos() {
-        return (List<Produto>) produtoRepository.findAll();
+    @GetMapping("/{accountId}")
+    public List<Produto> todos(@PathVariable String accountId) {
+
+        return (List<Produto>) produtoRepository.findByAccountAccountId(accountId);
     }
 
-    @PostMapping
-    public Produto salvar(@RequestBody Produto produto) {
+    @PostMapping("/{accountId}")
+    public Produto salvar(@PathVariable String accountId, @RequestBody Produto produto) {
         produto.setAtivo(true);
+
+        Account account = accountService.getAccountByAccountId(accountId);
+        produto.setAccount(account);
+
         return produtoRepository.save(produto);
     }
 
 
-    @GetMapping("/{codigo}")
-    public Produto um(@PathVariable Integer codigo) {
-        return produtoRepository.findById(codigo).get();
+    @GetMapping("/{codigo}/{accountId}")
+    public Produto um(@PathVariable Integer codigo, @PathVariable String accountId) {
+
+        return produtoRepository.findByCodigoAndAccountAccountId(codigo, accountId);
+
     }
 
     @DeleteMapping("/{codigo}")
@@ -45,9 +58,12 @@ public class ProdutoController extends MainController {
         return new Mensagem(DELETADO_COM_SUCESSO);
     }
 
-    @PatchMapping("{codigo}/ativo")
-    public Produto mudarStatus(@PathVariable Integer codigo) {
-        Produto produto = produtoRepository.findById(codigo).get();
+    @PatchMapping("{codigo}/ativo/{accountId}")
+    public Produto mudarStatus(@PathVariable Integer codigo, @PathVariable String accountId) {
+
+        Produto produto = produtoRepository.findByCodigoAndAccountAccountId(codigo, accountId);
+
+
         if (produto.getAtivo()) {
             produto.setAtivo(false);
         } else {
@@ -56,8 +72,11 @@ public class ProdutoController extends MainController {
         return produtoRepository.save(produto);
     }
 
-    @PutMapping("/{codigo}")
-    public Produto alterar(@RequestBody Produto produto, @PathVariable int codigo) {
+    @PutMapping("/{codigo}/{accountId}")
+    public Produto alterar(@RequestBody Produto produto, @PathVariable int codigo, @PathVariable String accountId) {
+
+        Account account = accountService.getAccountByAccountId(accountId);
+        produto.setAccount(account);
         produto.setCodigo(codigo);
         return produtoRepository.save(produto);
     }

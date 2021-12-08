@@ -18,4 +18,5 @@ public interface ClienteRepository extends CrudRepository<Cliente,Integer> {
 
     Cliente findByIdAndAccountAccountId(Integer id, String accountId);
 
+    Cliente getAccountByAccountId(String accountId);
 }

@@ -2,9 +2,7 @@ package com.sistema.api.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Produto {
@@ -15,6 +13,18 @@ public class Produto {
     private String nome;
     private String descricao;
     private Boolean ativo;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public Boolean getAtivo() {
         return ativo;
