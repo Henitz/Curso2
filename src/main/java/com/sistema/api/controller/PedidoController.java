@@ -79,8 +79,12 @@ public class PedidoController extends MainController {
         return pedidoRepository.save(pedido);
     }
 
-    @PutMapping("/{codigo}")
-    public Pedido alterar(@RequestBody Pedido pedido, @PathVariable int codigo) {
+    @PutMapping("/{codigo}/{accountId}")
+    public Pedido alterar(@RequestBody Pedido pedido, @PathVariable int codigo, @PathVariable String accountId) {
+
+        Account account = accountService.getAccountByAccountId(accountId);
+        pedido.setAccount(account);
+
         pedido.setCodigo(codigo);
         return pedidoRepository.save(pedido);
     }
