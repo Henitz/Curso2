@@ -3,13 +3,14 @@ package com.sistema.api.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class Produto {
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
-    private Integer codigo;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, unique = true, nullable = false)
+    private UUID codigo;
     private String nome;
     private String descricao;
     private Boolean ativo;
@@ -34,11 +35,11 @@ public class Produto {
         this.ativo = ativo;
     }
 
-    public Integer getCodigo() {
+    public UUID getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(UUID codigo) {
         this.codigo = codigo;
     }
 

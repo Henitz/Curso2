@@ -32,6 +32,9 @@ public class AccountServiceImpl implements AccountService {
         account.setEmail(accountLoginRequest.getEmail());
         account.setEncryptedPassword(passwordEncoder.encode(accountLoginRequest.getPassword()));
         account.setAccountId(utils.generateAccountId(30));
+        if( accountRepository.findByEmail(accountLoginRequest.getEmail()) != null ){
+            return new Account();
+        }
         return accountRepository.save(account);
     }
 
