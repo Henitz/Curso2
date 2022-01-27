@@ -5,6 +5,10 @@ public class GraficoDto {
     private int total;
     private String categoria;
 
+    public GraficoDto(){
+
+    }
+
     public String getCategoria() {
         return categoria;
     }

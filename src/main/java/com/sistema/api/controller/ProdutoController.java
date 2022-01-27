@@ -1,56 +1,99 @@
 package com.sistema.api.controller;
 
-import com.sistema.api.home.MainController;
+import com.sistema.api.controller.Response.AccountResponse;
+import com.sistema.api.dto.ProdutoDto;
+import com.sistema.api.home.Main;
 import com.sistema.api.model.Account;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.model.Produto;
-import com.sistema.api.repository.PedidoRepository;
-import com.sistema.api.repository.ProdutoRepository;
 import com.sistema.api.service.AccountService;
+import com.sistema.api.service.PedidoService;
+import com.sistema.api.service.ProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+;
 
 @RestController
 @RequestMapping("/produtos")
 @CrossOrigin(origins = "*")
-public class ProdutoController extends MainController {
+public class ProdutoController extends Main {
 
-    private ProdutoRepository produtoRepository;
+    @Autowired
+    ProdutoService produtoService;
+
+    @Autowired
     private AccountService accountService;
-    private PedidoRepository pedidoRepository;
 
-    public ProdutoController(ProdutoRepository produtoRepository,
-                             AccountService accountService,
-                             PedidoRepository pedidoRepository
-    ) {
-        this.produtoRepository = produtoRepository;
-        this.accountService = accountService;
-        this.pedidoRepository = pedidoRepository;
-    }
+    @Autowired
+    private PedidoService pedidoService;
+
+
 
     @GetMapping("/{accountId}")
-    public List<Produto> todos(@PathVariable String accountId) {
+    public List<ProdutoDto> todos(@PathVariable String accountId) {
 
-        return (List<Produto>) produtoRepository.findByAccountAccountId(accountId);
+        List<Produto> produtos = produtoService.findByAccountId(accountId);
+        List<ProdutoDto> produtosDto = new ArrayList<>();
+
+        for (Produto produto : produtos) {
+
+            ProdutoDto produtoDto = new ProdutoDto();
+            produtoDto.setCodigo(produto.getCodigo());
+            produtoDto.setNome(produto.getNome());
+            produtoDto.setDescricao(produto.getDescricao());
+            produtoDto.setAtivo(produto.getAtivo());
+
+           produtosDto.add(produtoDto);
+
+        }
+
+        return produtosDto;
+
     }
 
     @PostMapping("/{accountId}")
-    public Produto salvar(@PathVariable String accountId, @RequestBody Produto produto) {
-        produto.setAtivo(true);
+    public ProdutoDto salvar(@PathVariable String accountId, @RequestBody ProdutoDto dto) {
+
+        Produto produto = new Produto();
+        produto.setNome(dto.getNome());
+        produto.setAtivo(dto.getAtivo());
+        produto.setDescricao(dto.getDescricao());
 
         Account account = accountService.getAccountByAccountId(accountId);
         produto.setAccount(account);
 
-        return produtoRepository.save(produto);
-    }
+        Produto produtoReturn = produtoService.salvar(produto);
+        ProdutoDto dtoReturn = new ProdutoDto();
+        dtoReturn.setCodigo(produtoReturn.getCodigo());
+        dtoReturn.setDescricao(produtoReturn.getNome());
+        dtoReturn.setAtivo(true);
+
+
+        AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setAccountId(produtoReturn.getAccount().getAccountId());
+
+        return dtoReturn;
+
+     }
 
 
     @GetMapping("/{codigo}/{accountId}")
-    public Produto um(@PathVariable UUID codigo, @PathVariable String accountId) {
+    public ProdutoDto um(@PathVariable UUID codigo, @PathVariable String accountId) {
 
-        return produtoRepository.findByCodigoAndAccountAccountId(codigo, accountId);
+
+        Produto produtoReturn = produtoService.findByCodigoAndAccountAccountId(codigo, accountId);
+        ProdutoDto dtoReturn = new ProdutoDto();
+        dtoReturn.setCodigo(produtoReturn.getCodigo());
+        dtoReturn.setNome(produtoReturn.getNome());
+        dtoReturn.setDescricao(produtoReturn.getDescricao());
+        dtoReturn.setAtivo(produtoReturn.getAtivo());
+
+        return dtoReturn;
 
     }
 
@@ -61,13 +104,13 @@ public class ProdutoController extends MainController {
         Account account = accountService.getAccountByAccountId(accountId);
         produto.setAccount(account);
         int quantidadeDeProdutos =
-                pedidoRepository.pedidosDoProdutoEncontrados(produto);
+                pedidoService.pedidosDoProdutoEncontrados(produto);
         Boolean block_delecao = false;
         if (quantidadeDeProdutos > 0 ){
             block_delecao = true;
             return new Mensagem("Preciso bloquear a deleção", block_delecao );
         } else {
-            produtoRepository.deleteById(codigo);
+            produtoService.deleteByCodigo(codigo);
             return new Mensagem(DELETADO_COM_SUCESSO, block_delecao);
         }
     }
@@ -75,7 +118,7 @@ public class ProdutoController extends MainController {
     @PatchMapping("{codigo}/ativo/{accountId}")
     public Produto mudarStatus(@PathVariable UUID codigo, @PathVariable String accountId) {
 
-        Produto produto = produtoRepository.findByCodigoAndAccountAccountId(codigo, accountId);
+        Produto produto = produtoService.findByCodigoAndAccountAccountId(codigo, accountId);
 
 
         if (produto.getAtivo()) {
@@ -83,7 +126,7 @@ public class ProdutoController extends MainController {
         } else {
             produto.setAtivo(true);
         }
-        return produtoRepository.save(produto);
+        return produtoService.salvar(produto);
     }
 
     @PutMapping("/{codigo}/{accountId}")
@@ -92,7 +135,7 @@ public class ProdutoController extends MainController {
         Account account = accountService.getAccountByAccountId(accountId);
         produto.setAccount(account);
         produto.setCodigo(codigo);
-        return produtoRepository.save(produto);
+        return produtoService.salvar(produto);
     }
 
 

@@ -1,25 +1,36 @@
 package com.sistema.api.model;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class Cliente {
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
-    private Integer id;
-    private String nome;
-    private Integer quantidadeFuncionarios;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
     private String cidade;
-    private String Estado;
-    private String Pais;
+    private String estado;
+    private String pais;
+    private String nome;
+    private  Integer quantidadeFuncionarios;
     private Boolean ativo;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public Cliente(){}
+    public Cliente(UUID id, String nome, String cidade, String estado, String pais, Integer quantidadeFuncionarios, Boolean ativo, Account account) {
+        this.id = id;
+        this.nome = nome;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.pais = pais;
+        this.quantidadeFuncionarios = quantidadeFuncionarios;
+        this.ativo = ativo;
+        this.account = account;
+    }
 
     public Account getAccount() {
         return account;
@@ -38,26 +49,26 @@ public class Cliente {
     }
 
     public String getEstado() {
-        return Estado;
+        return estado;
     }
 
     public void setEstado(String estado) {
-        Estado = estado;
+        this.estado = estado;
     }
 
     public String getPais() {
-        return Pais;
+        return pais;
     }
 
     public void setPais(String pais) {
-        Pais = pais;
+        this.pais = pais;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

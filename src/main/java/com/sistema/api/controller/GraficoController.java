@@ -1,9 +1,10 @@
 package com.sistema.api.controller;
 
 import com.sistema.api.dto.GraficoDto;
-import com.sistema.api.repository.ClienteRepository;
-import com.sistema.api.repository.PedidoRepository;
-import com.sistema.api.repository.ProdutoRepository;
+import com.sistema.api.service.ClienteService;
+import com.sistema.api.service.PedidoService;
+import com.sistema.api.service.ProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +18,15 @@ import java.util.List;
 @CrossOrigin("*")
 public class GraficoController {
 
-    private final ProdutoRepository produtoRepository;
-    private final ClienteRepository clienteRepository;
-    private final PedidoRepository pedidoRepository;
+    @Autowired
+    PedidoService pedidoService;
 
-    public GraficoController(ProdutoRepository produtoRepository, ClienteRepository clienteRepository, PedidoRepository pedidoRepository) {
-        this.produtoRepository = produtoRepository;
-        this.clienteRepository = clienteRepository;
-        this.pedidoRepository = pedidoRepository;
-    }
+    @Autowired
+    ProdutoService produtoService;
+
+    @Autowired
+    ClienteService clienteService;
+
 
     @GetMapping("/totais")
     public List<GraficoDto> getTotais(){
@@ -33,16 +34,16 @@ public class GraficoController {
         List<GraficoDto> dados = new ArrayList<>();
 
         GraficoDto produtos = new GraficoDto();
-        produtos.setTotal(produtoRepository.total());
+        produtos.setTotal(produtoService.total());
         produtos.setCategoria("Produtos");
 
 
         GraficoDto clientes = new GraficoDto();
-        clientes.setTotal(clienteRepository.total());
+        clientes.setTotal(clienteService.total());
         clientes.setCategoria("Clientes");
 
         GraficoDto pedidos = new GraficoDto();
-        pedidos.setTotal(pedidoRepository.total());
+        pedidos.setTotal(pedidoService.total());
         pedidos.setCategoria("Pedidos");
 
         dados.add(produtos);

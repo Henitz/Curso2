@@ -4,17 +4,18 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Entity
 public class Pedido {
 
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
-    private Integer codigo;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID codigo;
     private LocalDate data;
     private Boolean ativo;
+
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -29,6 +30,14 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public UUID getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(UUID codigo) {
+        this.codigo = codigo;
+    }
 
     public Account getAccount() {
         return account;
@@ -54,13 +63,7 @@ public class Pedido {
         this.ativo = ativo;
     }
 
-    public Integer getCodigo() {
-        return codigo;
-    }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
 
     public LocalDate getData() {
         return data;
