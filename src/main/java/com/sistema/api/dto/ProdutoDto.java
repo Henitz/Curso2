@@ -1,5 +1,7 @@
 package com.sistema.api.dto;
 
+import com.sistema.api.model.Account;
+
 import java.util.UUID;
 
 public class ProdutoDto {
@@ -10,6 +12,9 @@ public class ProdutoDto {
 
     public ProdutoDto(){
 
+    }
+
+    public ProdutoDto(UUID codigo, String nome, String descricao, Boolean ativo) {
     }
 
 

@@ -1,9 +1,14 @@
 package com.sistema.api.controller;
 
+import com.sistema.api.builder.ClienteBuilder;
+import com.sistema.api.builder.ProdutoBuilder;
+import com.sistema.api.builder.ProdutoDtoBuilder;
 import com.sistema.api.controller.Response.AccountResponse;
+import com.sistema.api.dto.ClienteDto;
 import com.sistema.api.dto.ProdutoDto;
 import com.sistema.api.home.Main;
 import com.sistema.api.model.Account;
+import com.sistema.api.model.Cliente;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.model.Produto;
 import com.sistema.api.service.AccountService;
@@ -59,25 +64,43 @@ public class ProdutoController extends Main {
     @PostMapping("/{accountId}")
     public ProdutoDto salvar(@PathVariable String accountId, @RequestBody ProdutoDto dto) {
 
-        Produto produto = new Produto();
-        produto.setNome(dto.getNome());
-        produto.setAtivo(dto.getAtivo());
-        produto.setDescricao(dto.getDescricao());
+//        Produto produto = new Produto();
+//        produto.setNome(dto.getNome());
+//        produto.setAtivo(dto.getAtivo());
+//        produto.setDescricao(dto.getDescricao());
 
         Account account = accountService.getAccountByAccountId(accountId);
-        produto.setAccount(account);
+
+//        produto.setAccount(account);
+        Produto produto = new ProdutoBuilder()
+                .nome(dto.getNome())
+                .descricao(dto.getDescricao())
+                .ativo(dto.getAtivo())
+            .build();
+
+
 
         Produto produtoReturn = produtoService.salvar(produto);
-        ProdutoDto dtoReturn = new ProdutoDto();
-        dtoReturn.setCodigo(produtoReturn.getCodigo());
-        dtoReturn.setDescricao(produtoReturn.getNome());
-        dtoReturn.setAtivo(true);
+
+
+//        ProdutoDto dtoReturn = new ProdutoDto();
+//        dtoReturn.setCodigo(produtoReturn.getCodigo());
+//        dtoReturn.setDescricao(produtoReturn.getNome());
+//        dtoReturn.setAtivo(true);
+
+
+        ProdutoDto produtoDto = new ProdutoDtoBuilder()
+                .codigo(produtoReturn.getCodigo())
+                .nome(produtoReturn.getNome())
+                .descricao(produtoReturn.getDescricao())
+                .ativo(produtoReturn.getAtivo())
+            .build();
 
 
         AccountResponse accountResponse = new AccountResponse();
         accountResponse.setAccountId(produtoReturn.getAccount().getAccountId());
 
-        return dtoReturn;
+        return produtoDto;
 
      }
 

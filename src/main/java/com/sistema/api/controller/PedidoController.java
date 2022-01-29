@@ -1,6 +1,7 @@
 package com.sistema.api.controller;
 
 
+import com.sistema.api.builder.*;
 import com.sistema.api.controller.Response.AccountResponse;
 import com.sistema.api.dto.AccountDto;
 import com.sistema.api.dto.ClienteDto;
@@ -138,40 +139,75 @@ public class PedidoController extends Main {
     @PostMapping("/{accountId}")
     public PedidoDto save(@PathVariable String accountId, @RequestBody PedidoDto dto)  {
 
-        Pedido pedido = new Pedido();
-        pedido.setData(dto.getData());
-        pedido.setAtivo(dto.getAtivo());
+//        Pedido pedido = new Pedido();
+//        pedido.setData(dto.getData());
+//        pedido.setAtivo(dto.getAtivo());
+
+        Pedido pedido = new PedidoBuilder()
+                .data(dto.getData())
+                .ativo(dto.getAtivo())
+                .build();
 
         Account account = accountService.getAccountByAccountId(accountId);
         pedido.setAccount(account);
 
         if(!(Objects.isNull(dto.getCliente()) || Objects.isNull(dto.getProduto()))) {
 
-   //         Cliente clienteReturn = clienteService.findById(dto.getCliente().getId());
-            Cliente cliente = new Cliente();
-            cliente.setId(dto.getCliente().getId());
-            cliente.setNome(dto.getCliente().getNome());
-            cliente.setCidade(dto.getCliente().getCidade());
-            cliente.setEstado(dto.getCliente().getEstado());
-            cliente.setPais(dto.getCliente().getPais());
-            cliente.setAtivo(dto.getCliente().getAtivo());
+            Cliente cliente = new ClienteBuilder()
+                    .id(dto.cliente.getId())
+                    .nome(dto.cliente.getNome())
+                    .cidade(dto.cliente.getCidade())
+                    .estado(dto.cliente.getEstado())
+                    .pais(dto.cliente.getPais())
+                    .ativo(dto.cliente.getAtivo())
+                .build();
             pedido.setCliente(cliente);
 
-  //          Produto produtoReturn = produtoService.findByCodigo(dto.getProduto().getCodigo());
-            Produto produto = new Produto();
-            produto.setCodigo(dto.getProduto().getCodigo());
-            produto.setNome(dto.getProduto().getNome());
-            produto.setAtivo(dto.getProduto().getAtivo());
-            pedido.setProduto(produto);
+
+
+
+
+//            Cliente cliente = new Cliente();
+//            cliente.setId(dto.getCliente().getId());
+//            cliente.setNome(dto.getCliente().getNome());
+//            cliente.setCidade(dto.getCliente().getCidade());
+//            cliente.setEstado(dto.getCliente().getEstado());
+//            cliente.setPais(dto.getCliente().getPais());
+//            cliente.setAtivo(dto.getCliente().getAtivo());
+//            pedido.setCliente(cliente);
+
+            Produto produto = new ProdutoBuilder()
+                    .codigo(dto.produto.getCodigo())
+                    .nome(dto.produto.getNome())
+                    .descricao(dto.produto.getDescricao())
+                    .ativo(dto.produto.getAtivo())
+                .build();
+            pedido. setProduto(produto);
+
+
+
+
+//            Produto produto = new Produto();
+//            produto.setCodigo(dto.getProduto().getCodigo());
+//            produto.setNome(dto.getProduto().getNome());
+//            produto.setAtivo(dto.getProduto().getAtivo());
+//            pedido.setProduto(produto);
 
         }
 
         Pedido pedidoReturn = pedidoService.save(pedido);
 
+        PedidoDto dtoReturn = new PedidoDtoBuilder()
+                .codigo(dto.getCodigo())
+                .data(dto.getData())
+            .build();
 
-        PedidoDto dtoReturn = new PedidoDto();
-        dtoReturn.setCodigo(pedidoReturn.getCodigo());
-        dtoReturn.setData(pedidoReturn.getData());
+
+
+
+//        PedidoDto dtoReturn = new PedidoDto();
+//        dtoReturn.setCodigo(pedidoReturn.getCodigo());
+//        dtoReturn.setData(pedidoReturn.getData());
 
 
         AccountDto accountDto = new AccountDto();
@@ -179,21 +215,39 @@ public class PedidoController extends Main {
 
         if(!Objects.isNull(dto.getProduto()) || Objects.isNull(dto.getCliente())) {
 
-            ProdutoDto produtoDto = new ProdutoDto();
-            produtoDto.setCodigo(produtoService.findByCodigo(dto.getProduto().getCodigo()).getCodigo());
-            produtoDto.setNome(produtoService.findByCodigo(dto.getProduto().getCodigo()).getNome());
-            produtoDto.setDescricao(produtoService.findByCodigo(dto.getProduto().getCodigo()).getDescricao());
-            produtoDto.setAtivo(produtoService.findByCodigo(dto.getProduto().getCodigo()).getAtivo());
+
+            ProdutoDto produtoDto = new ProdutoDtoBuilder()
+                    .codigo(produtoService.findByCodigo(dto.produto.getCodigo()).getCodigo())
+                    .nome(produtoService.findByCodigo(dto.getProduto().getCodigo()).getNome())
+                    .descricao(produtoService.findByCodigo(dto.getProduto().getCodigo()).getDescricao())
+                    .ativo(produtoService.findByCodigo(dto.getProduto().getCodigo()).getAtivo())
+                .build();
             dtoReturn.setProduto(produtoDto);
 
-            ClienteDto clienteDto = new ClienteDto();
-            clienteDto.setId(clienteService.findById(dto.getCliente().getId()).getId());
-            clienteDto.setNome(clienteService.findById(dto.getCliente().getId()).getNome());
-            clienteDto.setCidade(clienteService.findById(dto.getCliente().getId()).getCidade());
-            clienteDto.setEstado(clienteService.findById(dto.getCliente().getId()).getEstado());
-            clienteDto.setPais(clienteService.findById(dto.getCliente().getId()).getPais());
-            clienteDto.setAtivo(clienteService.findById(dto.getCliente().getId()).getAtivo());
+            ClienteDto clienteDto = new ClienteDtoBuilder()
+                    .id(clienteService.findById(dto.getCliente().getId()).getId())
+                    .nome(clienteService.findById(dto.getCliente().getId()).getNome())
+                    .cidade(clienteService.findById(dto.getCliente().getId()).getCidade())
+                    .estado(clienteService.findById(dto.getCliente().getId()).getEstado())
+                    .pais(clienteService.findById(dto.getCliente().getId()).getPais())
+                    .ativo(clienteService.findById(dto.getCliente().getId()).getAtivo())
+                .build();
             dtoReturn.setCliente(clienteDto);
+//            ProdutoDto produtoDto = new ProdutoDto();
+//            produtoDto.setCodigo(produtoService.findByCodigo(dto.getProduto().getCodigo()).getCodigo());
+//            produtoDto.setNome(produtoService.findByCodigo(dto.getProduto().getCodigo()).getNome());
+//            produtoDto.setDescricao(produtoService.findByCodigo(dto.getProduto().getCodigo()).getDescricao());
+//            produtoDto.setAtivo(produtoService.findByCodigo(dto.getProduto().getCodigo()).getAtivo());
+//            dtoReturn.setProduto(produtoDto);
+//
+//            ClienteDto clienteDto = new ClienteDto();
+//            clienteDto.setId(clienteService.findById(dto.getCliente().getId()).getId());
+//            clienteDto.setNome(clienteService.findById(dto.getCliente().getId()).getNome());
+//            clienteDto.setCidade(clienteService.findById(dto.getCliente().getId()).getCidade());
+//            clienteDto.setEstado(clienteService.findById(dto.getCliente().getId()).getEstado());
+//            clienteDto.setPais(clienteService.findById(dto.getCliente().getId()).getPais());
+//            clienteDto.setAtivo(clienteService.findById(dto.getCliente().getId()).getAtivo());
+//            dtoReturn.setCliente(clienteDto);
         }
 
         AccountResponse accountResponse = new AccountResponse();

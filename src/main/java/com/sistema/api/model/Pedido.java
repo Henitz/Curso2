@@ -31,6 +31,13 @@ public class Pedido {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    public Pedido(UUID codigo, LocalDate data, Boolean ativo, Cliente cliente, Produto produto) {
+    }
+
+    public Pedido() {
+        
+    }
+
     public UUID getCodigo() {
         return codigo;
     }

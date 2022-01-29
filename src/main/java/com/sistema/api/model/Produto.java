@@ -1,6 +1,7 @@
 package com.sistema.api.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +17,16 @@ public class Produto {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public Produto(UUID codigo, String nome, String descricao, Boolean ativo) {
+    }
+
+    public Produto() {
+
+    }
+
+    public Produto(UUID codigo, LocalDate data, Boolean ativo) {
+    }
 
     public Account getAccount() {
         return account;

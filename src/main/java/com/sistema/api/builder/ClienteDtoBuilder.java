@@ -3,6 +3,7 @@ package com.sistema.api.builder;
 import com.sistema.api.dto.ClienteDto;
 import com.sistema.api.model.Account;
 import com.sistema.api.model.Cliente;
+import com.sistema.api.model.Produto;
 
 import java.util.UUID;
 
@@ -16,6 +17,19 @@ public class ClienteDtoBuilder {
     private Integer quantidadeFuncionarios;
     private Boolean ativo;
     private Account account;
+
+    private Cliente cliente;
+    private Produto produto;
+
+    public ClienteDtoBuilder cliente(Cliente cliente) {
+        this.cliente=cliente;
+        return this;
+    }
+
+    public ClienteDtoBuilder produto(Produto produto) {
+        this.produto=produto;
+        return this;
+    }
 
     public ClienteDtoBuilder id(UUID id){
         this.id=id;
@@ -58,5 +72,5 @@ public class ClienteDtoBuilder {
     }
 
     public ClienteDtoBuilder(){ }
-    public ClienteDto build() { return new ClienteDto(id,nome,cidade,estado,pais,quantidadeFuncionarios,ativo,account); }
+    public ClienteDto build() { return new ClienteDto(id,nome,cidade,estado,pais,quantidadeFuncionarios,ativo,account,cliente,produto); }
 }

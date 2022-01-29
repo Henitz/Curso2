@@ -1,6 +1,8 @@
 package com.sistema.api.dto;
 
 import com.sistema.api.model.Account;
+import com.sistema.api.model.Cliente;
+import com.sistema.api.model.Produto;
 
 import java.util.UUID;
 
@@ -24,6 +26,10 @@ public class ClienteDto {
         this.quantidadeFuncionarios = quantidadeFuncionarios;
         this.ativo = ativo;
     }
+
+    public ClienteDto(UUID id, String nome, String cidade, String estado, String pais, Integer quantidadeFuncionarios, Boolean ativo, Account account, Cliente cliente, Produto produto) {
+    }
+
 
     public UUID getId() {
         return id;

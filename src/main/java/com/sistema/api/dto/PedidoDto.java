@@ -1,5 +1,8 @@
 package com.sistema.api.dto;
 
+import com.sistema.api.model.Cliente;
+import com.sistema.api.model.Produto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -13,6 +16,11 @@ public class PedidoDto {
 
     public PedidoDto(){
 
+    }
+
+
+
+    public PedidoDto(UUID codigo, LocalDate data, Boolean ativo) {
     }
 
     public ClienteDto getCliente() {
