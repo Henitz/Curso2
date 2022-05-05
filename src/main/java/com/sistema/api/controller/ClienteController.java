@@ -11,6 +11,7 @@ import com.sistema.api.model.Mensagem;
 import com.sistema.api.service.AccountService;
 import com.sistema.api.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,15 +34,26 @@ public class ClienteController extends Main {
         List<Cliente> clientes = clienteService.findByAccountId(accountId);
         List<ClienteDto> clientesDto = new ArrayList<>();
         for (Cliente cliente : clientes) {
-            ClienteDto clienteDto = new ClienteDto();
-            clienteDto.setId(cliente.getId());
-            clienteDto.setNome(cliente.getNome());
-            clienteDto.setAtivo(cliente.getAtivo());
-            clienteDto.setCidade(cliente.getCidade());
-            clienteDto.setEstado(cliente.getEstado());
-            clienteDto.setPais(cliente.getPais());
-            clienteDto.setQuantidadeFuncionarios(cliente.getQuantidadeFuncionarios());
-            clientesDto.add(clienteDto);
+
+            ClienteDto clienteDto = new ClienteDtoBuilder()
+                    .id(cliente.getId())
+                    .nome(cliente.getNome())
+                    .cidade(cliente.getCidade())
+                    .estado(cliente.getEstado())
+                    .pais(cliente.getPais())
+                    .quantidadeFuncionarios(cliente.getQuantidadeFuncionarios())
+                    .ativo(cliente.getAtivo())
+                .build();
+
+//            ClienteDto clienteDto = new ClienteDto();
+//            clienteDto.setId(cliente.getId());
+//            clienteDto.setNome(cliente.getNome());
+//            clienteDto.setAtivo(cliente.getAtivo());
+//            clienteDto.setCidade(cliente.getCidade());
+//            clienteDto.setEstado(cliente.getEstado());
+//            clienteDto.setPais(cliente.getPais());
+//            clienteDto.setQuantidadeFuncionarios(cliente.getQuantidadeFuncionarios());
+//            clientesDto.add(clienteDto);
         }
         return clientesDto;
     }
@@ -63,7 +75,7 @@ public class ClienteController extends Main {
                     .cidade(dto.getCidade())
                     .estado(dto.getEstado())
                     .pais(dto.getPais())
-                    .quantiadeFuncionarios(dto.getQuantidadeFuncionarios())
+                    .quantidadeFuncionarios(dto.getQuantidadeFuncionarios())
                     .ativo(dto.getAtivo())
                     .account(account)
                 .build();
@@ -76,7 +88,7 @@ public class ClienteController extends Main {
                     .cidade(dto.getCidade())
                     .estado(dto.getEstado())
                     .pais(dto.getPais())
-                    .quantiadeFuncionarios(dto.getQuantidadeFuncionarios())
+                    .quantidadeFuncionarios(dto.getQuantidadeFuncionarios())
                     .ativo(dto.getAtivo())
                     .account(account)
                 .build();

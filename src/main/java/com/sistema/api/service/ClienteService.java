@@ -11,6 +11,10 @@ import com.sistema.api.repository.PedidoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -80,34 +84,8 @@ public class ClienteService extends Main {
     }
 
 
-    public Mensagem delete2(UUID id,  String accountId) {
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
 
-        Account account = accountRepository.getAccountByAccountId(accountId);
-        cliente.setAccount(account);
 
-        int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(cliente);
-
-        logger.info("Id: " + id);
-        logger.info("Quantidade de pedidos: " + quantidadeDePedidos);
-        Boolean block_delecao = false;
-
-        //TODO verificar se precisa de mais uma condição aqui
-        // &&
-        //clienteRepository.findById(id).getAccount()
-        //       .notequals(accountService.getAccountByAccountId(accountId))
-        if (quantidadeDePedidos > 0
-        ) {
-            block_delecao = true;
-            return new Mensagem("Preciso bloquear a deleção", block_delecao);
-        } else {
-            // return new Mensagem("Da pra deletar por que não tem amarrações em uso");
-            clienteRepository.deleteById(id);
-            return new Mensagem(DELETADO_COM_SUCESSO, block_delecao);
-
-        }
-    }
 
 
 
@@ -135,4 +113,25 @@ public class ClienteService extends Main {
     public int total() {
         return clienteRepository.total();
     }
+
+
+    public Page<Cliente> findAll() {
+        int page = 0;
+        int size = 10;
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                size,
+                Sort.Direction.ASC,
+                "name");
+        return new PageImpl<>(
+                clienteRepository.findAll(),
+                pageRequest, size);
+    }
+
+
+
+
+
+
+
 }

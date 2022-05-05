@@ -56,7 +56,7 @@ public class ClienteDtoBuilder {
         return this;
     }
 
-    public ClienteDtoBuilder quantiadeFuncionarios(Integer quantidadeFuncionarios){
+    public ClienteDtoBuilder quantidadeFuncionarios(Integer quantidadeFuncionarios){
         this.quantidadeFuncionarios=quantidadeFuncionarios;
         return this;
     }

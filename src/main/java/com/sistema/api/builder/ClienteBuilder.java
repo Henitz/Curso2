@@ -41,7 +41,7 @@ public class ClienteBuilder {
         return this;
     }
 
-    public ClienteBuilder quantiadeFuncionarios(Integer quantidadeFuncionarios){
+    public ClienteBuilder quantidadeFuncionarios(Integer quantidadeFuncionarios){
         this.quantidadeFuncionarios=quantidadeFuncionarios;
         return this;
     }
