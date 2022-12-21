@@ -16,8 +16,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,8 +51,9 @@ public class ClienteService extends Main {
     public Cliente findById(UUID id) {
         return clienteRepository.findById(id);
     }
-
+    @Transactional
     public Mensagem delete(UUID id, String accountId) {
+        Boolean block_delecao = false;
         Cliente cliente = new Cliente();
         cliente.setId(id);
 
@@ -61,60 +62,28 @@ public class ClienteService extends Main {
 
         int quantidadeDePedidos = pedidoRepository.pedidosDoClienteEncontrados(cliente);
 
-        logger.info("Id: " + id);
-        logger.info("Quantidade de pedidos: " + quantidadeDePedidos);
-        Boolean block_delecao = false;
-
-        //TODO verificar se precisa de mais uma condição aqui
-        // &&
-        //clienteRepository.findById(id).getAccount()
-        //       .notequals(accountService.getAccountByAccountId(accountId))
-        if (quantidadeDePedidos > 0
-        ) {
+        if (quantidadeDePedidos > 0) {
             block_delecao = true;
             return new Mensagem("Preciso bloquear a deleção", block_delecao);
         } else {
-            // return new Mensagem("Da pra deletar por que não tem amarrações em uso");
             clienteRepository.deleteById(id);
             return new Mensagem(DELETADO_COM_SUCESSO, block_delecao);
-
         }
-
-
     }
 
-
-
-
-
-
-
-
-
-
     public Cliente mudarStatus( UUID id,  String accountId) {
-
-
         Cliente cliente = clienteRepository.findByIdAndAccountAccountId(id, accountId);
-
-
         if (cliente.getAtivo()) {
             cliente.setAtivo(false);
         } else {
             cliente.setAtivo(true);
         }
         return clienteRepository.save(cliente);
-
     }
-
-
-
 
     public int total() {
         return clienteRepository.total();
     }
-
-
     public Page<Cliente> findAll() {
         int page = 0;
         int size = 10;
@@ -127,11 +96,4 @@ public class ClienteService extends Main {
                 clienteRepository.findAll(),
                 pageRequest, size);
     }
-
-
-
-
-
-
-
 }

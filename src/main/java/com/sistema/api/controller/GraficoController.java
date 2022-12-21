@@ -27,7 +27,6 @@ public class GraficoController {
     @Autowired
     ClienteService clienteService;
 
-
     @GetMapping("/totais")
     public List<GraficoDto> getTotais(){
 
@@ -36,7 +35,6 @@ public class GraficoController {
         GraficoDto produtos = new GraficoDto();
         produtos.setTotal(produtoService.total());
         produtos.setCategoria("Produtos");
-
 
         GraficoDto clientes = new GraficoDto();
         clientes.setTotal(clienteService.total());

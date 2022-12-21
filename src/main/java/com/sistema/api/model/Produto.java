@@ -1,5 +1,7 @@
 package com.sistema.api.model;
 
+import com.sistema.api.dto.ProdutoDto;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -18,14 +20,24 @@ public class Produto {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Produto(UUID codigo, String nome, String descricao, Boolean ativo) {
-    }
-
     public Produto() {
 
     }
 
-    public Produto(UUID codigo, LocalDate data, Boolean ativo) {
+    public Produto(UUID codigo, String nome, String descricao, Boolean ativo, Account account) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.ativo = ativo;
+        this.account = account;
+    }
+
+    public Produto(ProdutoDto produtoDto) {
+        this.codigo = produtoDto.getCodigo();
+        this.nome = produtoDto.getNome();
+        this.descricao = produtoDto.getDescricao();
+        this.ativo = produtoDto.getAtivo();
+        this.account = produtoDto.getAccount();
     }
 
     public Account getAccount() {

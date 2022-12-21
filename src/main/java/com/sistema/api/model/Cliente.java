@@ -1,5 +1,7 @@
 package com.sistema.api.model;
 
+import com.sistema.api.dto.ClienteDto;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -8,7 +10,6 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private String cidade;
     private String estado;
     private String pais;
@@ -30,6 +31,17 @@ public class Cliente {
         this.quantidadeFuncionarios = quantidadeFuncionarios;
         this.ativo = ativo;
         this.account = account;
+    }
+
+    public Cliente(ClienteDto clienteDto){
+        this.id = clienteDto.getId();
+        this.nome = clienteDto.getNome();
+        this.cidade = clienteDto.getCidade();
+        this.estado = clienteDto.getEstado();
+        this.pais = clienteDto.getPais();
+        this.quantidadeFuncionarios = clienteDto.getQuantidadeFuncionarios();
+        this.ativo = clienteDto.getAtivo();
+        this.account = clienteDto.getAccount();
     }
 
     public Account getAccount() {

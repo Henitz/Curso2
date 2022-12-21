@@ -15,6 +15,7 @@ public class ClienteDto {
     private String estado;
     private String pais;
     private Boolean ativo;
+    private Account account;
 
     public ClienteDto(){}
     public ClienteDto(UUID id, String nome, String cidade, String estado, String pais, Integer quantidadeFuncionarios, Boolean ativo, Account account) {
@@ -25,11 +26,19 @@ public class ClienteDto {
         this.pais = pais;
         this.quantidadeFuncionarios = quantidadeFuncionarios;
         this.ativo = ativo;
+        this.account = account;
     }
 
-    public ClienteDto(UUID id, String nome, String cidade, String estado, String pais, Integer quantidadeFuncionarios, Boolean ativo, Account account, Cliente cliente, Produto produto) {
+    public ClienteDto(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.cidade = cliente.getCidade();
+        this.estado = cliente.getEstado();
+        this.pais = cliente.getPais();
+        this.quantidadeFuncionarios = cliente.getQuantidadeFuncionarios();
+        this.ativo = cliente.getAtivo();
+        this.account = cliente.getAccount() ;
     }
-
 
     public UUID getId() {
         return id;
@@ -85,5 +94,13 @@ public class ClienteDto {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

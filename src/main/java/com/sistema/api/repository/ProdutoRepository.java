@@ -14,10 +14,8 @@ public interface ProdutoRepository extends CrudRepository<Produto, UUID> {
 
     List<Produto> findByAccountAccountId(String accountId);
 
-
-
-
     Produto findByCodigo(UUID codigo);
 
     Produto findByCodigoAndAccountAccountId(UUID codigo, String accountId);
+    void deleteByCodigo(UUID codigo);
 }

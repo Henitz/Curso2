@@ -20,13 +20,9 @@ public interface PedidoRepository extends JpaRepository<Pedido,Integer> {
 
     @Query("select count(ped) from Pedido ped where ped.produto =:produto")
     public int pedidosDoProdutoEncontrados(@Param("produto") Produto produto);
-
     List<Pedido> findByAccountAccountId(String accountId);
-
     Pedido findByCodigoAndAccountAccountId(UUID codigo, String accountId);
-
     Pedido findByCodigo(UUID codigo);
-
     void deleteByCodigo(UUID codigo);
 
     boolean existsByCodigo(UUID codigo);

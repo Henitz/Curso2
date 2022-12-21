@@ -1,14 +1,8 @@
 package com.sistema.api.controller;
 
-import com.sistema.api.builder.ClienteBuilder;
-import com.sistema.api.builder.ProdutoBuilder;
-import com.sistema.api.builder.ProdutoDtoBuilder;
-import com.sistema.api.controller.Response.AccountResponse;
-import com.sistema.api.dto.ClienteDto;
 import com.sistema.api.dto.ProdutoDto;
 import com.sistema.api.home.Main;
 import com.sistema.api.model.Account;
-import com.sistema.api.model.Cliente;
 import com.sistema.api.model.Mensagem;
 import com.sistema.api.model.Produto;
 import com.sistema.api.service.AccountService;
@@ -17,9 +11,9 @@ import com.sistema.api.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 ;
 
@@ -37,87 +31,25 @@ public class ProdutoController extends Main {
     @Autowired
     private PedidoService pedidoService;
 
-
-
     @GetMapping("/{accountId}")
     public List<ProdutoDto> todos(@PathVariable String accountId) {
-
-        List<Produto> produtos = produtoService.findByAccountId(accountId);
-        List<ProdutoDto> produtosDto = new ArrayList<>();
-
-        for (Produto produto : produtos) {
-
-            ProdutoDto produtoDto = new ProdutoDto();
-            produtoDto.setCodigo(produto.getCodigo());
-            produtoDto.setNome(produto.getNome());
-            produtoDto.setDescricao(produto.getDescricao());
-            produtoDto.setAtivo(produto.getAtivo());
-
-           produtosDto.add(produtoDto);
-
-        }
-
-        return produtosDto;
-
+        return produtoService.findByAccountId(accountId).stream()
+                .map(ProdutoDto::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{accountId}")
-    public ProdutoDto salvar(@PathVariable String accountId, @RequestBody ProdutoDto dto) {
-
-//        Produto produto = new Produto();
-//        produto.setNome(dto.getNome());
-//        produto.setAtivo(dto.getAtivo());
-//        produto.setDescricao(dto.getDescricao());
-
+    public ProdutoDto salvar(@PathVariable String accountId, @RequestBody ProdutoDto produtoDto) {
         Account account = accountService.getAccountByAccountId(accountId);
-
-//        produto.setAccount(account);
-        Produto produto = new ProdutoBuilder()
-                .nome(dto.getNome())
-                .descricao(dto.getDescricao())
-                .ativo(dto.getAtivo())
-            .build();
-
-
-
-        Produto produtoReturn = produtoService.salvar(produto);
-
-
-//        ProdutoDto dtoReturn = new ProdutoDto();
-//        dtoReturn.setCodigo(produtoReturn.getCodigo());
-//        dtoReturn.setDescricao(produtoReturn.getNome());
-//        dtoReturn.setAtivo(true);
-
-
-        ProdutoDto produtoDto = new ProdutoDtoBuilder()
-                .codigo(produtoReturn.getCodigo())
-                .nome(produtoReturn.getNome())
-                .descricao(produtoReturn.getDescricao())
-                .ativo(produtoReturn.getAtivo())
-            .build();
-
-
-        AccountResponse accountResponse = new AccountResponse();
-        accountResponse.setAccountId(produtoReturn.getAccount().getAccountId());
-
-        return produtoDto;
-
-     }
+        produtoDto.setAccount(account);
+        Produto produto = new Produto(produtoDto);
+        return new ProdutoDto(produtoService.salvar(produto));
+    }
 
 
     @GetMapping("/{codigo}/{accountId}")
     public ProdutoDto um(@PathVariable UUID codigo, @PathVariable String accountId) {
-
-
-        Produto produtoReturn = produtoService.findByCodigoAndAccountAccountId(codigo, accountId);
-        ProdutoDto dtoReturn = new ProdutoDto();
-        dtoReturn.setCodigo(produtoReturn.getCodigo());
-        dtoReturn.setNome(produtoReturn.getNome());
-        dtoReturn.setDescricao(produtoReturn.getDescricao());
-        dtoReturn.setAtivo(produtoReturn.getAtivo());
-
-        return dtoReturn;
-
+        return new ProdutoDto(produtoService.findByCodigoAndAccountAccountId(codigo, accountId));
     }
 
     @DeleteMapping("/{codigo}/{accountId}")
@@ -143,7 +75,6 @@ public class ProdutoController extends Main {
 
         Produto produto = produtoService.findByCodigoAndAccountAccountId(codigo, accountId);
 
-
         if (produto.getAtivo()) {
             produto.setAtivo(false);
         } else {
@@ -153,13 +84,13 @@ public class ProdutoController extends Main {
     }
 
     @PutMapping("/{codigo}/{accountId}")
-    public Produto alterar(@RequestBody Produto produto, @PathVariable UUID codigo, @PathVariable String accountId) {
-
+    public Object alterar(@RequestBody ProdutoDto produtoDto, @PathVariable UUID codigo, @PathVariable String accountId) {
         Account account = accountService.getAccountByAccountId(accountId);
-        produto.setAccount(account);
-        produto.setCodigo(codigo);
-        return produtoService.salvar(produto);
+        produtoDto.setAccount(account);
+        Produto produto = new Produto(produtoDto);
+        if(produtoService.findByCodigo(codigo).getAccount().equals(account)){
+            return new ProdutoDto(produtoService.salvar(produto));
+        }
+        return new Mensagem(REGISTRO_NAO_ENCONTRADO);
     }
-
-
 }
